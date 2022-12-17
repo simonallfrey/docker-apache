@@ -31,3 +31,14 @@ sudo a2ensite myserver.com
 sudo a2dissite myserver.com-le-ssl
 sudo systemctl reload apache2
 ```
+
+Not sure what /run is. To investigate.
+``` sh
+$ mount|grep tmpfs
+none on /sys/fs/cgroup type tmpfs (ro,nosuid,nodev,noexec)
+none on /dev type devtmpfs (rw,nosuid,mode=755)
+tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev,noexec)
+tmpfs on /run type tmpfs (rw,nosuid,nodev,size=419432k,mode=755)
+tmpfs on /run/lock type tmpfs (rw,nosuid,nodev,noexec,relatime,size=5120k)
+tmpfs on /run/user/1000 type tmpfs (rw,nosuid,nodev,relatime,size=419428k,mode=700,uid=1000,gid=1000)
+```
