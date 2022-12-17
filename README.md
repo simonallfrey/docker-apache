@@ -19,6 +19,7 @@ sudo docker run --name hello-nginx-container -d -p 8181:80 hello-nginx
   ProxyPass /hello-nginx http://127.0.0.1:8181/
   ProxyPassReverse /hello-nginx http://127.0.0.1:8181/
 
+  # and any other app you like running on e.g. 8081 with entrypoint /app2
   ProxyPass /app2/ http://127.0.0.1:8081/
   ProxyPassReverse /app2/ http://127.0.0.1:8081/
 </VirtualHost>
