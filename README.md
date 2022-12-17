@@ -1,5 +1,7 @@
 # Example of running docker web app through Apache.
 
+As our example web app we use nginx (doen't need a database like phoenix or wordpress)
+
 ``` sh
 sudo docker build -t hello-nginx .
 sudo docker run --name hello-nginx-container -d -p 8181:80 hello-nginx
@@ -24,6 +26,7 @@ sudo docker run --name hello-nginx-container -d -p 8181:80 hello-nginx
   ProxyPassReverse /app2/ http://127.0.0.1:8081/
 </VirtualHost>
 ```
+credit to https://stackoverflow.com/questions/46099348/how-to-use-apache-to-redirect-to-docker-container
 
 ``` sh
 sudo a2ensite myserver.com
@@ -31,14 +34,24 @@ sudo a2ensite myserver.com
 sudo a2dissite myserver.com-le-ssl
 sudo systemctl reload apache2
 ```
+Now head over to http://myserver.com/hello-nginx
 
-Not sure what /run is. To investigate.
+
 ``` sh
-$ mount|grep tmpfs
-none on /sys/fs/cgroup type tmpfs (ro,nosuid,nodev,noexec)
-none on /dev type devtmpfs (rw,nosuid,mode=755)
-tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev,noexec)
-tmpfs on /run type tmpfs (rw,nosuid,nodev,size=419432k,mode=755)
-tmpfs on /run/lock type tmpfs (rw,nosuid,nodev,noexec,relatime,size=5120k)
-tmpfs on /run/user/1000 type tmpfs (rw,nosuid,nodev,relatime,size=419428k,mode=700,uid=1000,gid=1000)
+sudo docker ps
+sudo docker stop hello-nginx-container
+sudo docker info
+sudo docker images
 ```
+If this last gives you some `REPOSITORY:TAG <none>:<none>` follow this advice:
+
+``` sh
+sudo docker rmi $(sudo docker images -f "dangling=true" -q)
+```
+or maybe be more insistent if claims are made of usage by non existent container.
+
+``` sh
+sudo docker rmi -f $(sudo docker images -f "dangling=true" -q)
+```
+
+credit: https://projectatomic.io/blog/2015/07/what-are-docker-none-none-images/
